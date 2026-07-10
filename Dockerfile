@@ -5,7 +5,9 @@ WORKDIR /app
 
 # Package fayllarini nusxalash
 COPY package*.json ./
-RUN npm ci --only=production
+
+# BARCHA dependensiyalarni o'rnatish (devDependencies ham)
+RUN npm ci
 
 # Source kodlarni nusxalash
 COPY . .
@@ -24,8 +26,9 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Sitemap va robots.txt ni nusxalash (agar mavjud bo'lsa)
-COPY --from=builder /app/public/sitemap.xml /usr/share/nginx/html/sitemap.xml 2>/dev/null || true
-COPY --from=builder /app/public/robots.txt /usr/share/nginx/html/robots.txt 2>/dev/null || true
+RUN --mount=type=bind,from=builder,source=/app/public,target=/public \
+    if [ -f /public/sitemap.xml ]; then cp /public/sitemap.xml /usr/share/nginx/html/; fi || true && \
+    if [ -f /public/robots.txt ]; then cp /public/robots.txt /usr/share/nginx/html/; fi || true
 
 EXPOSE 80
 

@@ -3,9 +3,13 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Package fayllarini nusxalash
 COPY package*.json ./
-RUN npm ci --only=production
 
+# BARCHA dependensiyalarni o'rnatish
+RUN npm ci
+
+# Source kodlarni nusxalash
 COPY . .
 
 # Sitemap generator skriptini ishga tushirish
