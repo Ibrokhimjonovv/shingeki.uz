@@ -1,28 +1,32 @@
-# Use official Node.js image as the base
-FROM node:22-alpine
+# Dockerfile - Vite static sayt uchun
+FROM node:20-alpine AS builder
 
-# Install pnpm globally
-#RUN npm install -g pnpm
-RUN npm install -g pnpm@9
-# Set working directory
 WORKDIR /app
 
-# Copy package files and pnpm lockfile
-COPY package.json pnpm-lock.yaml* ./
+# Package fayllarini nusxalash
+COPY package*.json ./
+RUN npm ci --only=production
 
-# Install dependencies using pnpm
-#RUN pnpm install --frozen-lockfile
-# Install dependencies using pnpm
-
-RUN pnpm install --frozen-lockfile
-# Copy the rest of the app source code
+# Source kodlarni nusxalash
 COPY . .
 
-# Build the Next.js app
-RUN pnpm build
+# Build qilish (Vite)
+RUN npm run build
 
-# Expose the default Next.js port
-EXPOSE 3000
+# ============ PRODUCTION STAGE ============
+FROM nginx:alpine AS production
 
-# Start the Next.js app in production mode
-CMD ["pnpm", "start"]
+# Nginx konfiguratsiyasi
+RUN rm -rf /usr/share/nginx/html/*
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Build natijasini nusxalash
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Sitemap va robots.txt ni nusxalash (agar mavjud bo'lsa)
+COPY --from=builder /app/public/sitemap.xml /usr/share/nginx/html/sitemap.xml 2>/dev/null || true
+COPY --from=builder /app/public/robots.txt /usr/share/nginx/html/robots.txt 2>/dev/null || true
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
