@@ -1,0 +1,16 @@
+{
+  "name": "anime-uz",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:sitemap": "vite build && npm run sitemap",
+    "sitemap": "node scripts/sitemap-generator.js",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
