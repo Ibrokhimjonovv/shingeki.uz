@@ -34,4 +34,5 @@ COPY . .
 RUN mkdir -p public
 
 # Sitemap generator skriptini ishga tushirish
-CMD ["npm", "run", "sitemap"]
+# Sitemapni /app/public va /app/dist ga yozamiz
+CMD ["sh", "-c", "npm run sitemap && cp public/sitemap.xml /usr/share/nginx/html/ 2>/dev/null || true && sleep 21600"]
