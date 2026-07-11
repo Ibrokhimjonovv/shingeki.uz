@@ -1,3 +1,21 @@
+# # Dockerfile.sitemap
+# FROM node:20-alpine
+
+# WORKDIR /app
+
+# # Package fayllarini nusxalash
+# COPY package*.json ./
+
+# # BARCHA dependensiyalarni o'rnatish
+# RUN npm ci
+
+# # Source kodlarni nusxalash
+# COPY . .
+
+# # Sitemap generator skriptini ishga tushirish
+# CMD ["npm", "run", "sitemap"]
+
+
 # Dockerfile.sitemap
 FROM node:20-alpine
 
@@ -11,6 +29,9 @@ RUN npm ci
 
 # Source kodlarni nusxalash
 COPY . .
+
+# public papkasini yaratish
+RUN mkdir -p public
 
 # Sitemap generator skriptini ishga tushirish
 CMD ["npm", "run", "sitemap"]

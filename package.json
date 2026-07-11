@@ -8,6 +8,7 @@
     "build": "vite build",
     "build:sitemap": "vite build && npm run sitemap",
     "sitemap": "node scripts/sitemap-generator.js",
+    "sitemap:docker": "node scripts/sitemap-generator.js && cp public/sitemap.xml dist/",
     "preview": "vite preview"
   },
   "devDependencies": {
