@@ -122,7 +122,6 @@
 
 // // Ishga tushirish
 // generateSitemapFile();
-
 // scripts/sitemap-generator.js
 import fs from 'fs';
 import path from 'path';
@@ -131,7 +130,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const baseUrl = 'https://shingeki.uz/#';
+const baseUrl = 'https://shingeki.uz';
 
 // API dan ma'lumot olish
 async function fetchData(endpoint) {
