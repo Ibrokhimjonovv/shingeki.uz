@@ -3,18 +3,18 @@
 // SEO teglarni tozalash (boshqa sahifaga o'tganda)
 export function clearSEO() {
     // Title ni defaultga qaytarish
-    document.title = 'SHINGEKI - Tarjima animelar olami';
+    document.title = 'SHINGEKI.UZ — Tarjima animelar olami | O\'zbek tilida anime';
     
     // Meta description
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.content = "O'zbek tilida anime haqida ma'lumot, katalog va tarjimalar - SHINGEKI";
+      metaDesc.content = "SHINGEKI.UZ - o'zbek tilidagi eng yaxshi anime sayti. Barcha janrdagi animelarni onlayn tarjima uzbek tilida tomosha qiling. Bepul va yuqori sifatli.";
     }
     
     // Meta keywords
     const metaKeywords = document.querySelector('meta[name="keywords"]');
     if (metaKeywords) {
-      metaKeywords.content = 'anime, o\'zbek tilida anime, anime tarjima, onlayn anime, bepul anime, shingeki';
+      metaKeywords.content = 'anime, o\'zbek tilida anime, anime tarjima, onlayn anime, bepul anime, shingeki, anime uzbek, manga, anime katalog';
     }
     
     // Canonical
@@ -37,19 +37,19 @@ export function clearSEO() {
     ogTags.forEach(prop => {
       const tag = document.querySelector(`meta[property="${prop}"]`);
       if (tag && prop === 'og:title') {
-        tag.content = 'SHINGEKI - Anime tarjimalar olami | O\'zbek tilida anime';
+        tag.content = 'SHINGEKI.UZ — Tarjima animelar olami | O\'zbek tilida anime';
       } else if (tag && prop === 'og:description') {
-        tag.content = "O'zbek tilidagi eng yaxshi anime sayti. Barcha janrdagi animelarni onlayn tarjima uzbek tilida tomosha qiling.";
+        tag.content = "SHINGEKI.UZ - o'zbek tilidagi eng yaxshi anime sayti. Barcha janrdagi animelarni onlayn tarjima uzbek tilida tomosha qiling. Bepul va yuqori sifatli.";
       } else if (tag && prop === 'og:url') {
         tag.content = window.location.origin + '/';
       } else if (tag && prop === 'og:type') {
         tag.content = 'website';
       } else if (tag && prop === 'og:site_name') {
-        tag.content = 'SHINGEKI';
+        tag.content = 'SHINGEKI.UZ';
       } else if (tag && prop === 'og:locale') {
         tag.content = 'uz_UZ';
       } else if (tag && prop === 'og:image') {
-        tag.content = 'https://shingeki.uz/og-image.jpg';
+        tag.content = 'https://shingeki.uz/preview.png';
       }
     });
     
@@ -64,13 +64,13 @@ export function clearSEO() {
     twitterTags.forEach(prop => {
       const tag = document.querySelector(`meta[name="${prop}"]`);
       if (tag && prop === 'twitter:title') {
-        tag.content = 'SHINGEKI - Anime tarjimalar olami';
+        tag.content = 'SHINGEKI.UZ — Tarjima animelar olami | O\'zbek tilida anime';
       } else if (tag && prop === 'twitter:description') {
-        tag.content = "O'zbek tilidagi eng yaxshi anime sayti. Bepul va yuqori sifatli animelar.";
+        tag.content = "SHINGEKI.UZ — O'zbek tilidagi eng yaxshi anime platformasi. Barcha janrdagi animelarni onlayn tarjimada, yuqori sifatda va mutlaqo bepul tomosha qiling. Anime olamiga xush kelibsiz!";
       } else if (tag && prop === 'twitter:card') {
         tag.content = 'summary_large_image';
       } else if (tag && prop === 'twitter:image') {
-        tag.content = 'https://shingeki.uz/og-image.jpg';
+        tag.content = 'https://shingeki.uz/preview.png';
       }
     });
     
@@ -118,7 +118,7 @@ export function clearSEO() {
     const ogTags = {
       'og:title': `${title} - onlayn anime tomosha qilish`,
       'og:description': `${title} anime ni uzbek tilida onlayn tomosha qiling. Bepul va yuqori sifatda.`,
-      'og:image': img || 'https://shingeki.uz/og-image.jpg',
+      'og:image': img || 'https://shingeki.uz/preview.png',
       'og:url': url,
       'og:type': 'video.tv_show',
       'og:site_name': 'Shingeki.uz',
@@ -140,7 +140,7 @@ export function clearSEO() {
       'twitter:card': 'summary_large_image',
       'twitter:title': `${title} - onlayn anime`,
       'twitter:description': `${title} anime ni uzbek tilida tomosha qiling.`,
-      'twitter:image': img || 'https://shingeki.uz/og-image.jpg',
+      'twitter:image': img || 'https://shingeki.uz/preview.png',
     };
   
     Object.entries(twitterTags).forEach(([key, value]) => {
@@ -168,7 +168,7 @@ export function clearSEO() {
       '@type': 'TVSeries',
       'name': title,
       'description': description || `${title} anime onlayn.`,
-      'image': img || 'https://shingeki.uz/og-image.jpg',
+      'image': img || 'https://shingeki.uz/preview.png',
       'genre': genres,
       'countryOfOrigin': anime.country || 'Yaponiya',
       'numberOfEpisodes': anime.all_series || '?',

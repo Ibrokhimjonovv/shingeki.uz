@@ -5,7 +5,7 @@ import Sitemap from 'vite-plugin-sitemap';
 // API dan dinamik yo'nalishlarni olish funksiyasi
 async function getDynamicRoutes() {
     try {
-        const res = await fetch('https://bk.afd-platform.uz/afd-platform/backend/urls/all-movies/all/');
+        const res = await fetch('https://bk.afd-platform.uz/afd-platform/backend/urls/tnall-animes/?no_pagination=true/');
         if (!res.ok) throw new Error(`Status: ${res.status}`);
         const data = await res.json();
 

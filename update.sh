@@ -22,7 +22,7 @@ echo "▶️ Yangi konteyner ishga tushirilmoqda..."
 docker run -d \
   --name shingeki-sitemap \
   -p 1111:1111 \
-  -e API_URL=https://bk.afd-platform.uz/afd-platform/backend/urls/all-movies/all \
+  -e API_URL=https://bk.afd-platform.uz/afd-platform/backend/urls/tnall-animes/?no_pagination=true \
   -e PORT=1111 \
   --restart unless-stopped \
   shingeki-sitemap

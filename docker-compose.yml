@@ -7,6 +7,6 @@ services:
     ports:
       - "1111:1111"
     environment:
-      - API_URL=https://bk.afd-platform.uz/afd-platform/backend/urls/all-movies/all
+      - API_URL=https://bk.afd-platform.uz/afd-platform/backend/urls/tnall-animes/?no_pagination=true
       - PORT=1111
     restart: unless-stopped
