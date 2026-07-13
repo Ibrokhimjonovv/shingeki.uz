@@ -112,15 +112,15 @@ export async function mountCatalog({ mode, query = '', genreId = '', page = 1 })
 
 function navigateSamePage(mode, query, genreId, page) {
   if (mode === 'search') {
-    window.location.hash = `#/search?q=${encodeURIComponent(query)}&page=${page}`;
+    window.location.hash = `/search?q=${encodeURIComponent(query)}&page=${page}`;
   } else if (mode === 'genre') {
-    window.location.hash = `#/genre/${genreId}?page=${page}`;
+    window.location.hash = `/genre/${genreId}?page=${page}`;
   } else if (mode === 'coming-soon') {
-    window.location.hash = `#/coming-soon?page=${page}`;
+    window.location.hash = `/coming-soon?page=${page}`;
   } else if (mode === 'fasl') {
-    window.location.hash = `#/fasl?page=${page}`;
+    window.location.hash = `/fasl?page=${page}`;
   } else {
-    window.location.hash = `#/all-animes?page=${page}`;
+    window.location.hash = `/all-animes?page=${page}`;
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }

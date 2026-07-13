@@ -12,7 +12,7 @@ export function animeCard(anime) {
   const fav = favorites.has(animeId);
 
   return `
-    <a href="#/anime/${animeId}" class="card" data-id="${animeId}">
+    <a href="/anime/${animeId}" class="card" data-id="${animeId}">
       <div class="card__poster">
         <img src="${img}" alt="${title}" loading="lazy" />
         <div class="card__score"><span>★</span>${5}</div>

@@ -24,8 +24,8 @@ function heroSlide(anime, index, active) {
         </div>
         <p class="hero__desc">${synopsis}</p>
         <div class="hero__actions">
-          <a href="#/anime/${anime.mcrntindx}" class="btn btn--primary">▶ Hozir ko'rish</a>
-          <a href="#/anime/${anime.mcrntindx}" class="btn btn--ghost">Batafsil ma'lumot</a>
+          <a href="/anime/${anime.mcrntindx}" class="btn btn--primary">▶ Hozir ko'rish</a>
+          <a href="/anime/${anime.mcrntindx}" class="btn btn--ghost">Batafsil ma'lumot</a>
         </div>
       </div>
     </div>

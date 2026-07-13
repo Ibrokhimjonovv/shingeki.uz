@@ -59,7 +59,7 @@ async function render() {
       attachNavbarEvents();
       mountDetail(id);
     } else {
-      window.location.hash = '#/';
+      window.location.hash = '/';
     }
   } else if (page === 'favorites') {
     app.innerHTML = layout('favorites', renderFavoritesPage());
@@ -70,7 +70,7 @@ async function render() {
       <div class="state state--empty" style="min-height:60vh;display:flex;flex-direction:column;justify-content:center;">
         <div class="state__icon">404</div>
         <p>Bu sahifa topilmadi.</p>
-        <a href="#/" class="btn btn--primary" style="margin-top:16px;width:fit-content;">Bosh sahifaga qaytish</a>
+        <a href="/" class="btn btn--primary" style="margin-top:16px;width:fit-content;">Bosh sahifaga qaytish</a>
       </div>
     `);
     attachNavbarEvents();
@@ -84,7 +84,7 @@ window.addEventListener('hashchange', () => {
   const hash = window.location.hash;
   
   // SEO tozalash (agar detail bo'lmasa)
-  if (!hash.startsWith('#/anime/')) {
+  if (!hash.startsWith('/anime/')) {
     clearSEO();
   }
   

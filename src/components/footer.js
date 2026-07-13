@@ -10,9 +10,9 @@ export function renderFooter() {
         <div class="footer__cols">
           <div>
             <h4>Navigatsiya</h4>
-            <a href="#/">Bosh sahifa</a>
-            <a href="#/all-animes">Barcha animelar</a>
-            <a href="#/favorites">Sevimlilar</a>
+            <a href="/">Bosh sahifa</a>
+            <a href="/all-animes">Barcha animelar</a>
+            <a href="/favorites">Sevimlilar</a>
           </div>
         </div>
       </div>
