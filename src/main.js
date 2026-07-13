@@ -5,13 +5,14 @@ import { renderHomeSkeleton, mountHome, unmountHome } from './pages/home.js';
 import { renderCatalogSkeleton, mountCatalog } from './pages/catalog.js';
 import { renderDetailSkeleton, mountDetail } from './pages/detail.js';
 import { renderFavoritesPage, mountFavoritesPage } from './pages/favoritesPage.js';
-import { clearSEO } from './utils/seo.js'; // ✅ QO'SHILDI
+import { clearSEO } from './utils/seo.js';
+import { navigateTo, getCurrentPath } from './utils/router.js';
 
 const app = document.getElementById('app');
 
-function parseHash() {
-  const hash = window.location.hash.replace(/^#/, '') || '/';
-  const [pathPart, queryPart] = hash.split('?');
+function parsePath() {
+  const fullPath = getCurrentPath();
+  const [pathPart, queryPart] = fullPath.split('?');
   const segments = pathPart.split('/').filter(Boolean);
   const params = new URLSearchParams(queryPart || '');
   return { segments, params };
@@ -27,7 +28,7 @@ function layout(activeRoute, contentHTML) {
 
 async function render() {
   unmountHome();
-  const { segments, params } = parseHash();
+  const { segments, params } = parsePath();
   const page = segments[0] || '';
 
   // ========== SEO tozalash (detail bo'lmasa) ==========
@@ -35,7 +36,7 @@ async function render() {
     clearSEO();
   }
 
-  if (page === '') {
+  if (page === '' || page === '/') {
     app.innerHTML = layout('', renderHomeSkeleton());
     attachNavbarEvents();
     mountHome();
@@ -59,18 +60,33 @@ async function render() {
       attachNavbarEvents();
       mountDetail(id);
     } else {
-      window.location.hash = '/';
+      navigateTo('/');
     }
   } else if (page === 'favorites') {
     app.innerHTML = layout('favorites', renderFavoritesPage());
     attachNavbarEvents();
     mountFavoritesPage();
+  } else if (page === 'coming-soon') {
+    const p = Number(params.get('page') || 1);
+    app.innerHTML = layout('', renderCatalogSkeleton({ mode: 'coming-soon' }));
+    attachNavbarEvents();
+    mountCatalog({ mode: 'coming-soon', page: p });
+  } else if (page === 'genre') {
+    const genreId = segments[1];
+    if (genreId) {
+      const p = Number(params.get('page') || 1);
+      app.innerHTML = layout('', renderCatalogSkeleton({ mode: 'genre', genreId }));
+      attachNavbarEvents();
+      mountCatalog({ mode: 'genre', genreId, page: p });
+    } else {
+      navigateTo('/');
+    }
   } else {
     app.innerHTML = layout('', `
       <div class="state state--empty" style="min-height:60vh;display:flex;flex-direction:column;justify-content:center;">
         <div class="state__icon">404</div>
         <p>Bu sahifa topilmadi.</p>
-        <a href="/" class="btn btn--primary" style="margin-top:16px;width:fit-content;">Bosh sahifaga qaytish</a>
+        <a href="/" class="btn btn--primary" style="margin-top:16px;width:fit-content;" onclick="event.preventDefault(); window.navigateTo('/')">Bosh sahifaga qaytish</a>
       </div>
     `);
     attachNavbarEvents();
@@ -79,21 +95,33 @@ async function render() {
   window.scrollTo({ top: 0 });
 }
 
-// ========== BIRLASHTIRILGAN HASHCHANGE EVENT ==========
-window.addEventListener('hashchange', () => {
-  const hash = window.location.hash;
+// navigateTo funksiyasini global qilamiz
+window.navigateTo = navigateTo;
+
+// Popstate event (oldinga/ortga tugmalari uchun)
+window.addEventListener('popstate', () => {
+  const path = window.location.pathname;
   
   // SEO tozalash (agar detail bo'lmasa)
-  if (!hash.startsWith('/anime/')) {
+  if (!path.startsWith('/anime/')) {
     clearSEO();
   }
   
-  // Sahifani render qilish
   render();
+});
+
+// Sahifadagi barcha linklar uchun delegate event
+document.addEventListener('click', (e) => {
+  // Faqat ichki linklar uchun
+  const link = e.target.closest('a');
+  if (!link) return;
+  
+  const href = link.getAttribute('href');
+  if (!href || href.startsWith('http') || href.startsWith('//') || href.startsWith('#')) return;
+  
+  e.preventDefault();
+  navigateTo(href);
 });
 
 // DOM loaded
 window.addEventListener('DOMContentLoaded', render);
-
-// Agar birinchi marta render qilish kerak bo'lmasa, lekin hozircha render() chaqirilgan
-// render(); // Bu qator kerak emas, chunki DOMContentLoaded render() ni chaqiradi
