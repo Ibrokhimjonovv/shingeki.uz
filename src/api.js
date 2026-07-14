@@ -43,7 +43,7 @@ export const api = {
   },
   // Bitta anime — qismlar, video, like/dislike bilan
   movieDetail(id) {
-    return get(`movies/${id}/`);
+    return get(`animes/${id}/`);
   },
   async getVideoUrl(fileUrl) {
     try {
