@@ -4,7 +4,7 @@ import { loader, errorState } from '../components/states.js';
 import { adaptAFDToCard } from '../utils/adapters.js';
 import { VideoPlayer } from '../components/videoPlayer.js';
 import { animeCard, attachCardEvents } from '../components/card.js';
-import { updateSEO, clearSEO } from '../utils/seo.js';
+import { updateSEO, clearSEO, set404SEOMeta } from '../utils/seo.js';
 
 export function renderDetailSkeleton() {
   return `<div id="detailRoot">${loader("Anime ma'lumotlari yuklanmoqda...")}</div>`;
@@ -24,9 +24,22 @@ export async function mountDetail(id) {
 
   try {
     const res = await api.movieDetail(id);
+    
+    // Agar API 404 qaytarsa yoki ma'lumot bo'sh bo'lsa
+    if (!res || res.status === 404 || !res.data) {
+      handleNotFound(root, id);
+      return;
+    }
+    
     const anime = res.data || res;
+    
+    // Agar anime ma'lumotlari bo'sh bo'lsa
+    if (!anime || Object.keys(anime).length === 0) {
+      handleNotFound(root, id);
+      return;
+    }
 
-    // ========== SEO teglarni yangilash ==========
+    // SEO teglarni yangilash
     updateSEO(anime);
 
     const adapted = adaptAFDToCard(anime);
@@ -178,7 +191,7 @@ export async function mountDetail(id) {
               </div>
             </aside>
           </div>
-          <!-- ========== YANGI: Shunga o'xshash animelar ========== -->
+          <!-- Shunga o'xshash animelar -->
               <section class="detail__section" id="recommendedSection">
                 <div class="section__head">
                   <div>
@@ -194,7 +207,7 @@ export async function mountDetail(id) {
       </div>
     `;
 
-    // ========== YANGI: Shunga o'xshash animelarni yuklash ==========
+    // Shunga o'xshash animelarni yuklash
     loadRecommendations(genres, id);
 
     // Video pleyerni ishga tushirish
@@ -300,14 +313,57 @@ export async function mountDetail(id) {
 
   } catch (e) {
     console.error('Detail mount error:', e);
-    root.innerHTML = errorState("Anime ma'lumotlarini yuklab bo'lmadi.");
-
-     // Xato bo'lsa SEO ni tozalaymiz
-     clearSEO();
+    
+    // Xatolik turiga qarab ishlov berish
+    if (e.response?.status === 404 || e.status === 404) {
+      handleNotFound(root, id);
+    } else {
+      // Boshqa xatoliklar uchun
+      root.innerHTML = errorState("Anime ma'lumotlarini yuklab bo'lmadi.");
+      set404SEOMeta(`Xatolik yuz berdi (#${id})`);
+    }
   }
 }
 
-// ========== Tavsiyalarni yuklash funksiyasi ==========
+// 404 holatini boshqarish funksiyasi
+function handleNotFound(root, id) {
+  // Meta robotlarni noindex, nofollow qilish
+  set404SEOMeta(`Anime topilmadi (#${id})`);
+  
+  // 404 sahifa kontentini ko'rsatish
+  root.innerHTML = `
+    <div class="not-found-page">
+      <div class="not-found-content">
+        <div class="not-found-icon">🔍</div>
+        <h1 class="not-found-title">Anime topilmadi</h1>
+        <p class="not-found-text">
+          Kechirasiz, siz qidirayotgan anime (#${id}) topilmadi yoki o'chirilgan bo'lishi mumkin.
+        </p>
+        <div class="not-found-actions">
+          <a href="/" class="btn btn--primary" data-link>
+            <span>🏠</span>
+            Bosh sahifaga qaytish
+          </a>
+          <a href="/anime" class="btn btn--outline" data-link>
+            <span>📺</span>
+            Barcha animelar
+          </a>
+        </div>
+        <div class="not-found-suggestions">
+          <h3>Sizga yoqishi mumkin:</h3>
+          <div id="notFoundSuggestions" class="custom-carousel">
+            ${loader('Tavsiyalar yuklanmoqda...')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Tavsiyalarni yuklash
+  loadNotFoundSuggestions();
+}
+
+// Tavsiyalarni yuklash funksiyasi
 async function loadRecommendations(genres, currentId) {
   const carousel = document.getElementById('recommendedCarousel');
   if (!carousel) return;
@@ -329,7 +385,7 @@ async function loadRecommendations(genres, currentId) {
           allRecommendations = allRecommendations.concat(filtered);
 
           // 10 tadan ko'p bo'lsa to'xtatamiz
-          // if (allRecommendations.length >= 10) break;
+          if (allRecommendations.length >= 10) break;
         } catch (e) {
           console.warn(`"${genre}" janri bo'yicha tavsiyalar topilmadi:`, e);
         }
@@ -345,7 +401,7 @@ async function loadRecommendations(genres, currentId) {
         // Hozirgi animeni filtrlaymiz
         allRecommendations = adaptedList
           .filter(a => a.mal_id != currentId)
-          .sort(() => Math.random() - 0.5)
+          .sort(() => Math.random() - 0.5);
       } catch (e) {
         console.warn('Alternativ tavsiyalar topilmadi:', e);
       }
@@ -364,7 +420,7 @@ async function loadRecommendations(genres, currentId) {
       }
 
       // 10 tadan ko'p bo'lmasin
-      const finalList = unique;
+      const finalList = unique.slice(0, 10);
 
       carousel.innerHTML = finalList.map(a => animeCard(a)).join('');
       attachCardEvents(carousel);
@@ -376,5 +432,27 @@ async function loadRecommendations(genres, currentId) {
   } catch (e) {
     console.error('Tavsiyalarni yuklashda xatolik:', e);
     carousel.innerHTML = `<p class="section__empty">Tavsiyalarni yuklab bo'lmadi.</p>`;
+  }
+}
+
+// 404 sahifasi uchun tavsiyalar
+async function loadNotFoundSuggestions() {
+  const container = document.getElementById('notFoundSuggestions');
+  if (!container) return;
+  
+  try {
+    const res = await api.home(6);
+    const list = res.data || res || [];
+    const adaptedList = list.map(adaptAFDToCard);
+    
+    if (adaptedList.length > 0) {
+      container.innerHTML = adaptedList.map(a => animeCard(a)).join('');
+      attachCardEvents(container);
+    } else {
+      container.innerHTML = `<p class="section__empty">Tavsiyalar topilmadi.</p>`;
+    }
+  } catch (e) {
+    console.warn('Tavsiyalar yuklanmadi:', e);
+    container.innerHTML = '';
   }
 }

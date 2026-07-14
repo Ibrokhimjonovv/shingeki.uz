@@ -1483,3 +1483,185 @@ button {
 #recommendedSection {
   margin-top: 30px;
 }
+
+
+/* ==================== 404 SAHIFA STILLARI ==================== */
+.not-found-page {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.not-found-content {
+  max-width: 600px;
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.not-found-icon {
+  font-size: 80px;
+  margin-bottom: 24px;
+  animation: bounce 2s infinite;
+}
+
+.not-found-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d3436;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.not-found-text {
+  font-size: 18px;
+  color: #636e72;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+.not-found-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.not-found-actions .btn--primary {
+  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  color: white;
+  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+}
+
+.not-found-actions .btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+}
+
+.not-found-actions .btn--outline {
+  border: 2px solid #6c5ce7;
+  color: #6c5ce7;
+  background: transparent;
+}
+
+.not-found-actions .btn--outline:hover {
+  background: #6c5ce7;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.not-found-suggestions {
+  text-align: left;
+  margin-top: 40px;
+  padding: 24px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.not-found-suggestions h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2d3436;
+}
+
+.not-found-suggestions .custom-carousel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+/* Animatsiyalar */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .not-found-page {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  }
+  
+  .not-found-title {
+    color: #dfe6e9;
+  }
+  
+  .not-found-text {
+    color: #b2bec3;
+  }
+  
+  .not-found-suggestions {
+    background: #2d3436;
+  }
+  
+  .not-found-suggestions h3 {
+    color: #dfe6e9;
+  }
+  
+  .not-found-actions .btn--outline {
+    border-color: #a29bfe;
+    color: #a29bfe;
+  }
+}
+
+/* Mobil moslashuv */
+@media (max-width: 768px) {
+  .not-found-page {
+    padding: 40px 16px;
+  }
+  
+  .not-found-icon {
+    font-size: 60px;
+  }
+  
+  .not-found-title {
+    font-size: 28px;
+  }
+  
+  .not-found-text {
+    font-size: 16px;
+  }
+  
+  .not-found-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .not-found-actions .btn {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+}
