@@ -24,12 +24,18 @@ export async function mountDetail(id) {
 
   try {
     const res = await api.movieDetail(id);
+
+    console.log(res);
+    
     
     // Agar API 404 qaytarsa yoki ma'lumot bo'sh bo'lsa
-    if (!res || res.status === 404 || !res.data) {
+    if (!res || res.status === 404) {
       handleNotFound(root, id);
       return;
     }
+
+    console.log("O'tdi");
+    
     
     const anime = res.data || res;
     
@@ -320,7 +326,7 @@ export async function mountDetail(id) {
     } else {
       // Boshqa xatoliklar uchun
       root.innerHTML = errorState("Anime ma'lumotlarini yuklab bo'lmadi.");
-      set404SEOMeta(`Xatolik yuz berdi (#${id})`);
+      set404SEOMeta(`Anime topilmadi`);
     }
   }
 }
